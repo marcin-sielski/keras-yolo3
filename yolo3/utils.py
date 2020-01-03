@@ -1,3 +1,4 @@
+from __future__ import division
 """Miscellaneous utility functions."""
 
 from functools import reduce
