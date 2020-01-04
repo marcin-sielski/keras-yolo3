@@ -27,6 +27,7 @@ class YOLO(object):
         "iou" : 0.45,
         "model_image_size" : (416, 416),
         "gpu_num" : 1,
+        "label": ""
     }
 
     @classmethod
@@ -101,6 +102,8 @@ class YOLO(object):
 
     def detect_image(self, image):
         start = timer()
+        original_image = image
+        images = []
 
         if self.model_image_size != (None, None):
             assert self.model_image_size[0]%32 == 0, 'Multiples of 32 required'
@@ -145,6 +148,10 @@ class YOLO(object):
             bottom = min(image.size[1], np.floor(bottom + 0.5).astype('int32'))
             right = min(image.size[0], np.floor(right + 0.5).astype('int32'))
             print(label, (left, top), (right, bottom))
+            
+            if self.label in label:
+                temp_image = original_image.crop((left, top, right, bottom))
+                images.append(temp_image)
 
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
@@ -164,7 +171,7 @@ class YOLO(object):
 
         end = timer()
         print(end - start)
-        return image
+        return image, images
 
     def close_session(self):
         self.sess.close()
