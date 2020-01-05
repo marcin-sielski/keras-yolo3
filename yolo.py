@@ -27,7 +27,7 @@ class YOLO(object):
         "iou" : 0.45,
         "model_image_size" : (416, 416),
         "gpu_num" : 1,
-        "label": ""
+        "class_name": ""
     }
 
     @classmethod
@@ -149,8 +149,12 @@ class YOLO(object):
             right = min(image.size[0], np.floor(right + 0.5).astype('int32'))
             print(label, (left, top), (right, bottom))
             
-            if self.label in label:
-                temp_image = original_image.crop((left, top, right, bottom))
+            if self.class_name == predicted_class:
+                midx = (right - left)/2 + left
+                midy = (bottom - top)/2 + top
+                temp_image = original_image.crop((midx - self.width/2, 
+                midy - self.height/2, midx + self.width/2,
+                midy + self.height/2))
                 images.append(temp_image)
 
             if top - label_size[1] >= 0:
