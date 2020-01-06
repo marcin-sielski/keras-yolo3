@@ -70,8 +70,8 @@ def create_dataset(**kwargs):
 
     yolo = YOLO(**dict(kwargs))
 
-    input_path = kwargs.get('input_path', '')
-    output_path = kwargs.get('output_path', '')
+    input_path = os.path.expanduser(kwargs.get('input_path', ''))
+    output_path = os.path.expanduser(kwargs.get('output_path', ''))
     class_name = kwargs.get('class_name', '')
     class_names = yolo._get_class()
 
